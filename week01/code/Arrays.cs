@@ -8,12 +8,25 @@ public static class Arrays
     /// <returns>array of doubles that are the multiples of the supplied number</returns>
     public static double[] MultiplesOf(double number, int length)
     {
-        // TODO Problem 1 Start
-        // Remember: Using comments in your program, write down your process for solving this problem
-        // step by step before you write the code. The plan should be clear enough that it could
-        // be implemented by another person.
 
-        return []; // replace this return statement with your own
+        /**
+        PLAN - SOLUTION
+        1- I will define a new Array of type double and of n size because that is what we will get
+        2- Then, I will write a for loop to iterate n times
+        3- To get each multiple of the number, I will run the next operation in each iteration:
+            double multiple = number * i;
+           Where i is the index of the iteration.
+        4- In each iteration the multiple will be added to the list of multiples 
+        **/
+
+        double[] multiples = new double[length];
+        for(int i=1; i<=length; i++)
+        {
+            double multiple = number * i;
+            multiples[i-1] = multiple;
+        }
+
+        return multiples;
     }
 
     /// <summary>
@@ -25,9 +38,26 @@ public static class Arrays
     /// </summary>
     public static void RotateListRight(List<int> data, int amount)
     {
-        // TODO Problem 2 Start
-        // Remember: Using comments in your program, write down your process for solving this problem
-        // step by step before you write the code. The plan should be clear enough that it could
-        // be implemented by another person.
+        /**
+        PLAN - SOLUTION
+        For this problem I will implement the next algorithm:
+        1 - Validate that the size of the list is > 1;
+        2 - I will define a new variable called divisionPoint to calculate the index of the cut point.
+            The cut index will be calculated like this: data.Count - amount;
+        3 - I will create a new list using the new variable and the data.GetRange method to get the right part of list.
+            The code would look something like this:
+            List<int> rightPart = data.GetRange(divisionPoint, amount);
+        4 - Then, use the data.RemoveRange and the data.InsertRange methods to remove the right part of the list
+            and insert the rightPart at the beginning of the List.
+            The code would look something like this:
+            data.RemoveRange(divisionPoint, amount);
+            data.InsertRange(0, rightPart);   
+        **/
+        if(data.Count <= 1) return;
+        int divisionPoint = data.Count - amount;
+        List<int> rightPart = data.GetRange(divisionPoint, amount);
+        data.RemoveRange(divisionPoint, amount);
+        data.InsertRange(0,rightPart);
+
     }
 }
