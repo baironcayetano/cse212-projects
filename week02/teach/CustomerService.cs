@@ -7,34 +7,95 @@
 public class CustomerService {
     public static void Run() {
         // Example code to see what's in the customer service queue:
-        // var cs = new CustomerService(10);
-        // Console.WriteLine(cs);
+         var cs = new CustomerService(10);
+         Console.WriteLine(cs);
 
         // Test Cases
 
         // Test 1
-        // Scenario: 
-        // Expected Result: 
-        //CustomerService customerServiceT1 = new CustomerService(-1);
-        //Console.WriteLine("Test 1");
-        //Trace.Assert(customerServiceT1._maxSize == 10,"Should return the default value of 10");
+        Console.WriteLine("=================");
+        Console.WriteLine("Test 1");
+        // Scenario:
+        // Is the max size value 10 by default when CustomService is created with an invalid parameter (a number smaller than or equal to zero)?
+        cs = new CustomerService(0);
 
+        // Expected Result: 10 -> no error
+        Trace.Assert(cs._maxSize == 10, "The max size should be 10 for any value equal to 0");
+        cs = new CustomerService(-1);
+        Trace.Assert(cs._maxSize == 10, "The max size should be 10 for any value smaller than 0"); 
         // Defect(s) Found: 
-        //CustomerService customerServiceT2 = new CustomerService(10);
-        //Trace.Assert(customerServiceT2._maxSize == 10,"Should return 10");
+        //None
+        Console.WriteLine("Passed!");
 
         Console.WriteLine("=================");
 
         // Test 2
-        // Scenario: 
-        // Expected Result: 
         Console.WriteLine("Test 2");
+        // Scenario: Does the AddNewCustomer method enqueue a new customer correctly?
+        cs = new CustomerService(2);
+        cs.AddNewCustomer();
+        // Expected Result:
+        //Should return the customer that has been added 
+        cs.ServeCustomer();
 
-        // Defect(s) Found: 
-
+        // Defect(s) Found:
+        //The ServeCustomer method deletes the customer and then tries to get it causing an argument out of range exception 
+        Console.WriteLine("Passed!");
         Console.WriteLine("=================");
 
-        // Add more Test Cases As Needed Below
+        //Test 3
+        Console.WriteLine("Test 3");
+        //Scenario:
+        //Are the clients going to be enqueued and dequeued using FIFO?
+        cs = new CustomerService(10);
+        cs.AddNewCustomer();
+        cs.AddNewCustomer();
+        cs.AddNewCustomer();
+
+        //Expected Result:
+        //It shoud use FIFO and display each served customer
+        cs.ServeCustomer();
+        cs.ServeCustomer();
+        cs.ServeCustomer();
+
+        //Defect(s) found:
+        //None
+        Console.WriteLine("Passed!");
+        Console.WriteLine("=================");
+
+        //Test 4
+        Console.WriteLine("Test 4");
+        //Scenario:
+        //If I try to add a new element to the queue when the queue is full, is it gonna add it?
+        cs = new CustomerService(1);
+        cs.AddNewCustomer();
+        cs.AddNewCustomer();
+        
+        //Expected Result:
+        //An error message.
+
+        Trace.Assert(cs._queue.Count <= cs._maxSize, "The Queue should not add a new element when the queue when it's already full");
+
+        //Defect(s) Found:
+        //The validation in the Enqueue method had to be _queue.Count == _maxSize and not something different.
+        Console.WriteLine("Passed!");
+
+        Console.WriteLine("=================");
+        //Test 5
+        Console.WriteLine("Test 5");
+        //Scenario:
+        //If the queue is empty when trying to serve a customer, then is an error message going to be displayed?
+        
+        cs = new CustomerService(1);
+        cs.ServeCustomer();
+        
+        //Expected Result:
+        //An error message
+        
+        //Defect(s) Found:
+        //There was not a validation like _queue.Count == 0 inside the ServeCustomer method causing an error;
+        Console.WriteLine("Passed!");
+
     }
 
     private readonly List<Customer> _queue = new();
@@ -73,7 +134,7 @@ public class CustomerService {
     /// </summary>
     private void AddNewCustomer() {
         // Verify there is room in the service queue
-        if (_queue.Count > _maxSize) {
+        if (_queue.Count == _maxSize) {;
             Console.WriteLine("Maximum Number of Customers in Queue.");
             return;
         }
@@ -94,9 +155,14 @@ public class CustomerService {
     /// Dequeue the next customer and display the information.
     /// </summary>
     private void ServeCustomer() {
-        _queue.RemoveAt(0);
+        if(_queue.Count == 0)
+        {
+            Console.WriteLine("There are no customers to serve");
+            return;
+        }
         var customer = _queue[0];
         Console.WriteLine(customer);
+        _queue.RemoveAt(0);
     }
 
     /// <summary>
