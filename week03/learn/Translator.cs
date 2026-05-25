@@ -25,6 +25,10 @@ public class Translator
     public void AddWord(string fromWord, string toWord)
     {
         // ADD YOUR CODE HERE
+        if (!_words.ContainsKey(fromWord))
+        {
+            _words.Add(fromWord, toWord);   
+        }
     }
 
     /// <summary>
@@ -34,7 +38,7 @@ public class Translator
     /// <returns>The translated word or "???" if no translation is available</returns>
     public string Translate(string fromWord)
     {
-        // ADD YOUR CODE HERE
-        return "";
+        string wordTranslated = _words.ContainsKey(fromWord) ? _words[fromWord] : "???";
+        return wordTranslated;
     }
 }
