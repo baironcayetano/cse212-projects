@@ -25,6 +25,24 @@ public class Maze
         _mazeMap = mazeMap;
     }
 
+    /*
+        The position param is used to determine if the user can make that movement.
+        Where: left = 0
+               right = 1
+               up = 2
+               down = 3
+    */
+    private bool CheckMovement(int position)
+    {
+        if(_mazeMap.TryGetValue((_currX, _currY), out bool[] directions))
+        {
+            if(directions != null && position < directions.Length){
+                return directions[position];
+            }
+        }
+        return false;
+    }
+
     // TODO Problem 4 - ADD YOUR CODE HERE
     /// <summary>
     /// Check to see if you can move left.  If you can, then move.  If you
@@ -32,7 +50,8 @@ public class Maze
     /// </summary>
     public void MoveLeft()
     {
-        // FILL IN CODE
+        if(!CheckMovement(0)) throw new InvalidOperationException("Can't go that way!");
+        _currX -= 1;
     }
 
     /// <summary>
@@ -41,7 +60,8 @@ public class Maze
     /// </summary>
     public void MoveRight()
     {
-        // FILL IN CODE
+       if(!CheckMovement(1)) throw new InvalidOperationException("Can't go that way!");
+        _currX += 1;
     }
 
     /// <summary>
@@ -50,7 +70,8 @@ public class Maze
     /// </summary>
     public void MoveUp()
     {
-        // FILL IN CODE
+        if(!CheckMovement(2)) throw new InvalidOperationException("Can't go that way!");
+        _currY -= 1;
     }
 
     /// <summary>
@@ -59,7 +80,8 @@ public class Maze
     /// </summary>
     public void MoveDown()
     {
-        // FILL IN CODE
+        if(!CheckMovement(3)) throw new InvalidOperationException("Can't go that way!");
+        _currY += 1;
     }
 
     public string GetStatus()
