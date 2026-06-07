@@ -133,6 +133,23 @@ public class LinkedList : IEnumerable<int>
     public void Remove(int value)
     {
         // TODO Problem 3
+        Node? currentNode = _head;
+
+        while(currentNode is not null)
+        {
+            if(currentNode.Data == value)
+            {
+                if(currentNode == _head) RemoveHead();
+                else if (currentNode == _tail) RemoveTail();
+                else
+                {
+                    currentNode.Prev?.Next = currentNode.Next; 
+                    currentNode.Next?.Prev = currentNode.Prev;    
+                }
+                return;
+            }
+            currentNode = currentNode.Next;    
+        }
     }
 
     /// <summary>
