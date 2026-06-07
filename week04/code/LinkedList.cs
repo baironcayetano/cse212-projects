@@ -193,8 +193,14 @@ public class LinkedList : IEnumerable<int>
     /// </summary>
     public IEnumerable Reverse()
     {
+        Node? currentNode = _tail;
+
         // TODO Problem 5
-        yield return 0; // replace this line with the correct yield return statement(s)
+        while(currentNode is not null)
+        {
+            yield return currentNode.Data;
+            currentNode = currentNode.Prev;
+        }
     }
 
     public override string ToString()
