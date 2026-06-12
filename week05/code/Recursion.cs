@@ -183,11 +183,36 @@ public static class Recursion
             currPath = new List<ValueTuple<int, int>>();
         }
         
-        // currPath.Add((1,2)); // Use this syntax to add to the current path
 
         // TODO Start Problem 5
         // ADD CODE HERE
+        if(!maze.IsValidMove(currPath,x,y)) return;
 
-        // results.Add(currPath.AsString()); // Use this to add your path to the results array keeping track of complete maze solutions when you find the solution.
+        currPath.Add((x,y));
+        
+        //If it is end I add the currPath to the results and remove the current (x,y) from the current Path
+        //so that I can get any other possible combination
+        if (maze.IsEnd(x,y))
+        {
+            results.Add(currPath.AsString());
+            currPath.RemoveAt(currPath.Count - 1);
+            return;
+        }
+
+        //These are some posible combinations for (x,y) movements
+        // (-1,0), (0,1),(0,-1) and (1,0)
+        int[] dx = {0,0,-1,1};
+        int[] dy = {-1,1,0,0};
+
+        for(int i = 0; i < 4; i++)
+        {
+            //I add this possible movements to the current (x,y)
+            int newX = x + dx[i];
+            int newY = y + dy[i];
+
+            SolveMaze(results,maze,newX,newY,currPath);
+        }
+
+        currPath.RemoveAt(currPath.Count - 1);
     }
 }
