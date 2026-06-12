@@ -101,19 +101,30 @@ public static class Recursion
     public static decimal CountWaysToClimb(int s, Dictionary<int, decimal>? remember = null)
     {
         // Base Cases
-        if (s == 0)
+        if(s < 0)
             return 0;
-        if (s == 1)
+        else if (s == 0)
             return 1;
-        if (s == 2)
+        else if (s == 1)
+            return 1;
+        else if (s == 2)
             return 2;
-        if (s == 3)
+        else if (s == 3)
             return 4;
+        
 
         // TODO Start Problem 3
-
+        if(remember == null)
+        {
+            remember = new Dictionary<int, decimal>();   
+        }
         // Solve using recursion
-        decimal ways = CountWaysToClimb(s - 1) + CountWaysToClimb(s - 2) + CountWaysToClimb(s - 3);
+        if (remember.TryGetValue(s, out decimal value))
+        {
+            return value;
+        }
+        decimal ways = CountWaysToClimb(s - 1, remember) + CountWaysToClimb(s - 2, remember) + CountWaysToClimb(s - 3, remember);
+        remember.Add(s,ways);
         return ways;
     }
 
@@ -133,6 +144,31 @@ public static class Recursion
     public static void WildcardBinary(string pattern, List<string> results)
     {
         // TODO Start Problem 4
+        if(pattern.Length == 0)
+        {
+            results.Add(pattern);
+            return;
+        }
+        
+        int i = pattern.IndexOf("*");
+        //-1 if there is not any other "*" in the string;
+        if(i == -1)
+        {
+          results.Add(pattern);
+          return;  
+        }
+
+        //splitting the pattern before and after the "*" character 
+        string leftPattern = pattern[..i];
+        string rightPattern = pattern[(i+1)..];
+
+        //posibilities
+        string firstPosibility = leftPattern + "0" + rightPattern;
+        string secondPosibility = leftPattern + "1" + rightPattern;
+
+        WildcardBinary(firstPosibility, results);
+        WildcardBinary(secondPosibility,results);
+        return;
     }
 
     /// <summary>
